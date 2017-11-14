@@ -1,0 +1,20 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+#- debug:
+#    var: pub_key
+#    var: password
+#    var: hostvars["127.0.0.1"]["ansible_user_id"]
+
+- name: Create User
+  user:
+    name: "{{ user }}"
+    state: present
+    group: wheel
+    password: "{{ password }}"
+
+- name: Add public key for the user just created
+  authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "{{ pub_key }}"

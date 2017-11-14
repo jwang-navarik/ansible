@@ -1,0 +1,5 @@
+[local]
+127.0.0.1
+
+[dockers]
+jack-docker ansible_host=10.96.99.53

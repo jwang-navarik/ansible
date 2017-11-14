@@ -1,0 +1,24 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: Preconditions
+  hosts: local
+  connection: local
+  tasks:
+    - name: Verify that Current User is not root
+      command: /bin/false
+      when: ansible_user_id == "root"
+
+- name: apply common configuration to all nodes
+  hosts: all:!local
+  remote_user: root
+
+  roles:
+    - common
+
+#- name: configure and deploy the dockers and application code
+#  hosts: dockers
+#  remote_user: root
+#
+#  roles:
+#    - docker
