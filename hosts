@@ -2,4 +2,8 @@
 127.0.0.1
 
 [dockers]
-jack-docker ansible_host="{{ ip_docker }}"
+jack-docker ansible_host="{{ ip_tyk }}"
+
+# Insall Tyk on the same Docker servers
+[tyks]
+jack-docker ansible_host="{{ ip_tyk }}"

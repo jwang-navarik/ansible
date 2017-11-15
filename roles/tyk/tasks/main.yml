@@ -1,0 +1,48 @@
+---
+# These tasks setup Tyk On-Premises: https://tyk.io/docs/get-started/with-tyk-on-premise/installation/redhat-rhel-centos/
+
+- name: Install Python 3.4 and other packages Tyk requires
+  yum: name={{ item }} state=present
+  with_items:
+   - python34
+   - pygpgme
+   - yum-utils
+   - wget
+   - epel-release
+   - redis
+
+- import_tasks: copy_repo.yml
+
+- name: Install more packages
+  yum: name={{ item }} state=present
+  with_items:
+   - mongodb-org
+   - tyk-dashboard
+   - tyk-gateway
+   - tyk-pump
+
+- name: Update All
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Start Mongo
+  service:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: Start redis
+  systemd:
+    name: redis
+    state: started
+    enabled: yes
+
+- import_tasks: start_tyk.yml
+
+- name: Disable Firewalld (Find a better solution!)
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
