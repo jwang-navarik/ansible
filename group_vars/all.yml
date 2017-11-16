@@ -1,7 +1,8 @@
 ---
 # Variables listed here are applicable to all host groups
 
-ip_tyk: 10.96.99.56
+ip_tyk: 10.96.99.70
+tyk_licence_key: DO NOT COMMIT
 user: "{{ hostvars[\"127.0.0.1\"][\"ansible_user_id\"] }}"
 # hashed password created with:
 # python -c 'import crypt; print crypt.crypt("password", "$some$salt$")'

@@ -1,21 +1,21 @@
 ---
-# These tasks start Tyk Dashboard
+# These tasks start the full Tyk stack
+# By recommendation in the tutorial, start services in the following sequence: Dashboard, Pump and Gateway
 
 - name: Configure Tyk Dashboard
-  shell: /opt/tyk-dashboard/install/setup.sh --listenport=3000 --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics --tyk_api_hostname={{ ip_tyk }} --tyk_node_hostname=http://localhost --tyk_node_port=8080 --portal_root=/portal --domain={{ ip_tyk }}
+  shell: /opt/tyk-dashboard/install/setup.sh --listenport=3000 --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics --tyk_api_hostname=$HOSTNAME --tyk_node_hostname=http://localhost --tyk_node_port=8080 --portal_root=/portal --domain="{{ ip_tyk }}"
+
+- name: Install Tyk Lisense Key
+  lineinfile:
+    path: /opt/tyk-dashboard/tyk_analytics.conf
+    regexp: '^(\s*)"license_key": "",(\s*)$'
+    line: '\1"license_key": "{{ tyk_licence_key }}",'
+    backrefs: yes
+    state: present
 
 - name: Start Tyk Dashboard
   service:
     name: tyk-dashboard
-    state: started
-    enabled: yes
-
-- name: Configure Tyk Gateway
-  shell: /opt/tyk-gateway/install/setup.sh --dashboard=1 --listenport=8080 --redishost=localhost --redisport=6379 --domain=""
-
-- name: Start Tyk Gateway
-  service:
-    name: tyk-gateway
     state: started
     enabled: yes
 
@@ -25,6 +25,15 @@
 - name: Start Tyk Pump
   service:
     name: tyk-pump
+    state: started
+    enabled: yes
+
+- name: Configure Tyk Gateway
+  shell: /opt/tyk-gateway/install/setup.sh --dashboard=1 --listenport=8080 --redishost=localhost --redisport=6379
+
+- name: Start Tyk Gateway
+  service:
+    name: tyk-gateway
     state: started
     enabled: yes
 

@@ -8,10 +8,6 @@
     - name: Verify that Current User is not root
       command: /bin/false
       when: ansible_user_id == "root"
-    - name: Setup SSH agent
-      command: ssh-agent bash
-    - name: Setup private key that will be used for communication with other hosts
-      command: ssh-add ~/.ssh/id_rsa
 
 - name: Apply common configuration to all nodes
   hosts: all:!local
@@ -20,12 +16,12 @@
   roles:
     - common
 
-- name: Install Docker CE
-  hosts: dockers
-  remote_user: root
+#- name: Install Docker CE
+#  hosts: dockers
+#  remote_user: root
 
-  roles:
-    - docker
+#  roles:
+#    - docker
 
 - name: Install Tyk
   hosts: tyks

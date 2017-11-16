@@ -7,11 +7,11 @@
 - name: Creates the tyk_tyk-dashboard.repo file
   template: src=tyk_tyk-dashboard.repo dest=/etc/yum.repos.d/tyk_tyk-dashboard.repo
 
-- name: Creates the tyk_tyk-gateway.repo file
-  template: src=tyk_tyk-gateway.repo dest=/etc/yum.repos.d/tyk_tyk-gateway.repo
-
 - name: Creates the tyk_tyk-pump.repo file
   template: src=tyk_tyk-pump.repo dest=/etc/yum.repos.d/tyk_tyk-pump.repo
 
+- name: Creates the tyk_tyk-gateway.repo file
+  template: src=tyk_tyk-gateway.repo dest=/etc/yum.repos.d/tyk_tyk-gateway.repo
+
 - name: update local cache
-  command: yum -q makecache -y --disablerepo='*' --enablerepo=epel --enablerepo='tyk_tyk-dashboard' --enablerepo='tyk_tyk-gateway' --enablerepo='tyk_tyk-pump' info zabbix
+  command: yum -q makecache -y --disablerepo='*' --enablerepo=epel  --enablerepo=mongodb-org-3.0 --enablerepo='tyk_tyk-dashboard' --enablerepo='tyk_tyk-pump' --enablerepo='tyk_tyk-gateway' info zabbix

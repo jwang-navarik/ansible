@@ -13,19 +13,27 @@
 
 - import_tasks: copy_repo.yml
 
-- name: Install more packages
-  yum: name={{ item }} state=present
-  with_items:
-   - mongodb-org
-   - tyk-dashboard
-   - tyk-gateway
-   - tyk-pump
+#- name: Install public keys for the packages below
+#  rpm_key:
+#    key: http://keyserver.tyk.io/tyk.io.rpm.signing.key
+#    state: present
 
-- name: Update All
-  yum:
-    name: "*"
-    state: latest
-    update_cache: yes
+#  Need to figure out how to accept the Keys
+#- name: Install more packages
+#  yum: name={{ item }} state=present
+#  with_items:
+#   - mongodb-org
+#   - tyk-dashboard
+#   - tyk-pump
+#   - tyk-gateway
+- name: Install more packages
+  command: yum install -y mongodb-org tyk-dashboard tyk-pump tyk-gateway
+
+#- name: Update All
+#  yum:
+#    name: "*"
+#    state: latest
+#    update_cache: yes
 
 - name: Start Mongo
   service:
@@ -39,10 +47,10 @@
     state: started
     enabled: yes
 
-- import_tasks: start_tyk.yml
-
 - name: Disable Firewalld (Find a better solution!)
   systemd:
     name: firewalld
     state: stopped
     enabled: no
+
+- import_tasks: start_tyk.yml
