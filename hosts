@@ -1,9 +1,9 @@
 [local]
 127.0.0.1
 
-[dockers]
-jack-docker ansible_host="{{ ip_tyk }}"
+[docker_servers]
+jack-docker ansible_host="{{ tyk_ip }}"
 
-# Insall Tyk on the same Docker servers
-[tyks]
-jack-docker ansible_host="{{ ip_tyk }}"
+# Insall Tyk on the same docker servers
+[tyk_servers]
+jack-docker ansible_host="{{ tyk_ip }}"

@@ -1,0 +1,8 @@
+---
+# Files in group_vars dir are bound to host groups not roles
+# Variables listed here are applicable to the "tyk_servers" hosts
+
+tyk_ip: DO NOT COMMIT ip
+tyk_dashboard_port: 3000
+tyk_gateway_port: 8080
+tyk_licence_key: DO NOT COMMIT licence key

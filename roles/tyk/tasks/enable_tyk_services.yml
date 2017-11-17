@@ -1,0 +1,22 @@
+---
+# These tasks copy tyk_services.xml files to /etc/firewalld/services and enable tyk services in firewalld
+
+- name: Creates tyk.xml file
+  template: src=tyk_services.xml dest=/etc/firewalld/services/tyk.xml
+
+# We need 2 steps due to the limitation of firewalld: http://www.firewalld.org/documentation/man-pages/firewall-cmd.html
+# 1. makes the change in runtime configuration
+# 2. makes the change in permanent configuration
+- name: Enables tyk immediately
+  firewalld:
+    service: tyk
+    permanent: no
+    immediate: yes
+    state: enabled
+
+- name: Enables tyk permanently
+  firewalld:
+    service: tyk
+    permanent: yes
+    immediate: no
+    state: enabled

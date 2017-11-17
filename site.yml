@@ -17,14 +17,14 @@
     - common
 
 #- name: Install Docker CE
-#  hosts: dockers
+#  hosts: docker_servers
 #  remote_user: root
 
 #  roles:
 #    - docker
 
 - name: Install Tyk
-  hosts: tyks
+  hosts: tyk_servers
   remote_user: root
 
   roles:

@@ -47,10 +47,6 @@
     state: started
     enabled: yes
 
-- name: Disable Firewalld (Find a better solution!)
-  systemd:
-    name: firewalld
-    state: stopped
-    enabled: no
+- import_tasks: enable_tyk_services.yml
 
 - import_tasks: start_tyk.yml
