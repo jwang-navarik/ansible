@@ -4,6 +4,11 @@
 - name: Creates tyk.xml file
   template: src=tyk_services.xml dest=/etc/firewalld/services/tyk.xml
 
+# We need this because the firewalld module doesn't support reload and without reload,
+# service added by the file above will not show up in the list of --get-services, thus cannot be added with the firewalld module
+- name: Reload firewalld
+  command: firewall-cmd --reload
+
 # We need 2 steps due to the limitation of firewalld: http://www.firewalld.org/documentation/man-pages/firewall-cmd.html
 # 1. makes the change in runtime configuration
 # 2. makes the change in permanent configuration

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
-  <short>Tyk Services</short>
+  <short>tyk</short>
   <description>Service configuration for tyk-dashboard and tyk-gateway</description>
   <port protocol="tcp" port="{{ tyk_dashboard_port }}"/>
   <port protocol="tcp" port="{{ tyk_gateway_port }}"/>
