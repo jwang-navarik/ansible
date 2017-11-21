@@ -29,6 +29,7 @@
 - name: Install more packages
   command: yum install -y mongodb-org tyk-dashboard tyk-pump tyk-gateway
 
+#  This is included in the tutorial but doesn't seem to be necessary
 #- name: Update All
 #  yum:
 #    name: "*"

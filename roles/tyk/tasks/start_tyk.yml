@@ -2,8 +2,15 @@
 # These tasks start the full Tyk stack
 # By recommendation in the tutorial, start services in the following sequence: Dashboard, Pump and Gateway
 
+- name: Add fake domains for dashboard, gateway and portal
+  blockinfile:
+    path: /etc/hosts
+    insertafter: "EOF"
+    block: '{{ tyk_ip }} {{ tyk_dashboard_domain }} {{ tyk_gateway_domain }} {{ tyk_portal_domain }}'
+    state: present
+
 - name: Configure Tyk Dashboard
-  shell: /opt/tyk-dashboard/install/setup.sh --listenport={{ tyk_dashboard_port }} --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics --tyk_api_hostname=$HOSTNAME --tyk_node_hostname=http://localhost --tyk_node_port={{ tyk_gateway_port }} --portal_root=/portal --domain="{{ tyk_ip }}"
+  shell: /opt/tyk-dashboard/install/setup.sh --listenport={{ tyk_dashboard_port }} --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics --tyk_api_hostname={{ tyk_gateway_domain }} --tyk_node_hostname=http://localhost --tyk_node_port={{ tyk_gateway_port }} --portal_root=/portal --domain={{ tyk_dashboard_domain }}
 
 - name: Install Tyk Lisense Key
   lineinfile:
@@ -14,7 +21,7 @@
     state: present
 
 - name: Start Tyk Dashboard
-  service:
+  systemd:
     name: tyk-dashboard
     state: started
     enabled: yes
@@ -23,7 +30,7 @@
   shell: /opt/tyk-pump/install/setup.sh --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics
 
 - name: Start Tyk Pump
-  service:
+  systemd:
     name: tyk-pump
     state: started
     enabled: yes
@@ -32,10 +39,10 @@
   shell: /opt/tyk-gateway/install/setup.sh --dashboard=1 --listenport={{ tyk_gateway_port }} --redishost=localhost --redisport=6379
 
 - name: Start Tyk Gateway
-  service:
+  systemd:
     name: tyk-gateway
     state: started
     enabled: yes
 
 - name: Bootstrap the Dashboard with an initial user and organisation
-  shell: /opt/tyk-dashboard/install/bootstrap.sh {{ tyk_ip }}
+  shell: /opt/tyk-dashboard/install/bootstrap.sh {{ tyk_dashboard_domain }}
