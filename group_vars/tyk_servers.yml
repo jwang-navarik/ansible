@@ -4,9 +4,9 @@
 
 tyk_ip: DO NOT COMMIT ip
 # dashboard and gateway can have the same domain but portal has to have a different domain
-tyk_dashboard_domain: tyk-dashboard.navarik.com
-tyk_gateway_domain: tyk-dashboard.navarik.com
-tyk_portal_domain: tyk-portal.navarik.com
+tyk_dashboard_domain: dashboard.navarik.com
+tyk_gateway_domain: dashboard.navarik.com
+tyk_portal_domain: portal.navarik.com
 tyk_dashboard_port: 3000
 tyk_gateway_port: 8080
 tyk_licence_key: DO NOT COMMIT licence key

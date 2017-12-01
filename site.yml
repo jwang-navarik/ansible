@@ -1,5 +1,9 @@
 ---
 # This playbook deploys the whole application stack in this site.
+#
+# Ensure your private key needed to ssh to those servers is accessible
+# and run the following command within the ansible directory:
+#   ansible-playbook site.yml -i hosts --key-file ~/.ssh/id_rsa -v
 
 - name: Preconditions
   hosts: local

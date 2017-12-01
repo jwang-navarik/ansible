@@ -1,0 +1,5 @@
+---
+# Files in group_vars dir are bound to host groups (defined in the hosts file in our case) not roles
+# Variables listed here are applicable to the "keycloak_servers" hosts
+
+keycloak_ip: DO NOT COMMIT ip

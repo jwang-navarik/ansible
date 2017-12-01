@@ -7,3 +7,6 @@ jack-tyk ansible_host="{{ tyk_ip }}"
 # Insall Tyk on the same docker servers
 [tyk_servers]
 jack-tyk ansible_host="{{ tyk_ip }}"
+
+[keycloak_servers]
+jack-keycloak ansible_host="{{ keycloak_ip }}"
