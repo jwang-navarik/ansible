@@ -6,6 +6,10 @@
 #    var: password
 #    var: hostvars["127.0.0.1"]["ansible_user_id"]
 
+- name: Set timezone to America/Vancouver
+  timezone:
+    name: America/Vancouver
+
 - name: Create User
   user:
     name: "{{ user }}"

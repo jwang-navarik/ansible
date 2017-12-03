@@ -13,6 +13,11 @@
       command: /bin/false
       when: ansible_user_id == "root"
 
+    - name: Download Keycloak
+      get_url:
+        url: "{{ keycloak_url }}"
+        dest: /tmp/{{ keycloak_archive }}
+
 - name: Apply common configuration to all nodes
   hosts: all:!local
   remote_user: root
@@ -27,9 +32,16 @@
 #  roles:
 #    - docker
 
-- name: Install Tyk
-  hosts: tyk_servers
+#- name: Install Tyk
+#  hosts: tyk_servers
+#  remote_user: root
+#
+#  roles:
+#    - tyk
+
+- name: Install Keycloak
+  hosts: keycloak_servers
   remote_user: root
 
   roles:
-    - tyk
+    - keycloak

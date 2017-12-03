@@ -8,3 +8,9 @@ password: $1$Test$GgUC8gu/wFk3AGSALkSHs1
 # DO NOT COMMIT key files
 pub_key_file: "~/.ssh/id_rsa.pub"
 pub_key: "{{ lookup('file', pub_key_file) }}"
+
+# Keycloak varibles that's only used in local
+keycloak_version: 3.4.1.CR1
+keycloak_package: keycloak-demo
+keycloak_archive: "{{ keycloak_package }}-{{ keycloak_version }}.tar.gz"
+keycloak_url: http://downloads.jboss.org/keycloak/{{ keycloak_version }}/{{keycloak_archive }}

@@ -1,0 +1,74 @@
+---
+# These tasks setup keycloak dir structures and start the service
+
+- name: Creates Keycloak target directory
+  file:
+    dest: "{{ keycloak_dir }}"
+    mode: 755
+    owner: root
+    group: root
+    state: directory
+
+# Keycloak has already been downloaded to ansible host
+- name: Extract Keycloak
+  unarchive:
+    src: /tmp/{{ keycloak_archive }}
+    dest: "{{ keycloak_dir }}"
+    remote_src: no
+    creates: "{{ keycloak_dir }}"
+
+- name: keycloak log directory
+  tags:
+  - keyclock
+  file:
+    dest: "{{ keycloak_log_dir }}"
+    mode: 755
+    owner: root
+    group: root
+    state: directory
+
+- name: keycloak data directory
+  tags:
+  - keyclock
+  file:
+    dest: "{{ keycloak_jboss_home }}/standalone/data"
+    mode: 755
+    owner: root
+    group: root
+    state: directory
+
+- name: keycloak tmp directory
+  tags:
+  - keyclock
+  file:
+    dest: "{{ keycloak_jboss_home }}/standalone/tmp"
+    mode: 755
+    owner: root
+    group: root
+    state: directory
+
+- name: make keycloak configuration directory readable
+  tags:
+  - keyclock
+  file:
+    dest: "{{ keycloak_jboss_home }}/standalone/configuration"
+    mode: 755
+    owner: root
+    group: root
+    state: directory
+
+- name: keycloak systemd setup
+  template:
+    mode: 755
+    owner: root
+    group: root
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+  notify:
+    - reload systemd
+
+- name: keycloak systemd service enable and start
+  service:
+    name: keycloak
+    enabled: yes
+    state: started

@@ -1,0 +1,27 @@
+---
+# These tasks copy tyk_services.xml files to /etc/firewalld/services and enable keycloak services in firewalld
+
+- name: Creates keycloak.xml file
+  template: src=keycloak_services.xml dest=/etc/firewalld/services/keycloak.xml
+
+# We need this because the firewalld module doesn't support reload and without reload,
+# service added by the file above will not show up in the list of --get-services, thus cannot be added with the firewalld module
+- name: Reload firewalld
+  command: firewall-cmd --reload
+
+# We need 2 steps due to the limitation of firewalld: http://www.firewalld.org/documentation/man-pages/firewall-cmd.html
+# 1. makes the change in runtime configuration
+# 2. makes the change in permanent configuration
+- name: Enables keycloak immediately
+  firewalld:
+    service: keycloak
+    permanent: no
+    immediate: yes
+    state: enabled
+
+- name: Enables keycloak permanently
+  firewalld:
+    service: keycloak
+    permanent: yes
+    immediate: no
+    state: enabled
