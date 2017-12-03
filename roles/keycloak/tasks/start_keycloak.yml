@@ -15,7 +15,7 @@
     src: /tmp/{{ keycloak_archive }}
     dest: "{{ keycloak_dir }}"
     remote_src: no
-    creates: "{{ keycloak_dir }}"
+    creates: "{{ keycloak_jboss_home }}"
 
 - name: keycloak log directory
   tags:
@@ -64,11 +64,9 @@
     group: root
     src: keycloak.service.j2
     dest: /etc/systemd/system/keycloak.service
-  notify:
-    - reload systemd
 
-- name: keycloak systemd service enable and start
-  service:
+- name: Start keycloak
+  systemd:
     name: keycloak
-    enabled: yes
     state: started
+    enabled: yes
