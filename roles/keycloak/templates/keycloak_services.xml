@@ -2,6 +2,6 @@
 <service>
   <short>keycloak</short>
   <description>Service configuration for Keycloak</description>
-  <port protocol="tcp" port="8080"/>
-  <port protocol="tcp" port="9990"/>
+  <port protocol="tcp" port="{{ http_port+offset|int }}"/>
+  <port protocol="tcp" port="{{ management_port+offset|int }}"/>
 </service>
