@@ -32,16 +32,16 @@
 #  roles:
 #    - docker
 
-#- name: Install Tyk
-#  hosts: tyk_servers
-#  remote_user: root
-#
-#  roles:
-#    - tyk
+- name: Install Tyk
+  hosts: tyk_servers
+  remote_user: root
+  roles:
+    - tyk
+  tags: tyk
 
 - name: Install Keycloak
   hosts: keycloak_servers
   remote_user: root
-
   roles:
     - keycloak
+  tags: keycloak

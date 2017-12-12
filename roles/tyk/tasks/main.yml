@@ -51,3 +51,4 @@
 - import_tasks: enable_tyk_services.yml
 
 - import_tasks: start_tyk.yml
+  tags: start_tyk

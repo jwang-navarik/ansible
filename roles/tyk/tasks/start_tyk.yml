@@ -11,6 +11,17 @@
 
 - name: Configure Tyk Dashboard
   shell: /opt/tyk-dashboard/install/setup.sh --listenport={{ tyk_dashboard_port }} --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics --tyk_api_hostname={{ tyk_gateway_domain }} --tyk_node_hostname=http://localhost --tyk_node_port={{ tyk_gateway_port }} --portal_root=/portal --domain={{ tyk_dashboard_domain }}
+  tags: dashboard
+
+# customized tyk-dashboard/tyk_analytics.conf changes have to be after the above configuration, which overwrites the configuration file
+- name: Disable hash_keys in tyk-dashboard/tyk_analytics.conf so that keys can be listed
+  lineinfile:
+    path: /opt/tyk-dashboard/tyk_analytics.conf
+    regexp: '^(\s*)"hash_keys": true,(\s*)$'
+    line: '\1"hash_keys": false,'
+    backrefs: yes
+    state: present
+  tags: hash_keys
 
 - name: Install Tyk Lisense Key
   lineinfile:
@@ -19,12 +30,14 @@
     line: '\1"license_key": "{{ tyk_licence_key }}",'
     backrefs: yes
     state: present
+  tags: license_key
 
 - name: Start Tyk Dashboard
   systemd:
     name: tyk-dashboard
-    state: started
+    state: restarted
     enabled: yes
+  tags: restart_tyk
 
 - name: Configure Tyk Pump
   shell: /opt/tyk-pump/install/setup.sh --redishost=localhost --redisport=6379 --mongo=mongodb://127.0.0.1/tyk_analytics
@@ -32,17 +45,30 @@
 - name: Start Tyk Pump
   systemd:
     name: tyk-pump
-    state: started
+    state: restarted
     enabled: yes
+  tags: restart_tyk
 
 - name: Configure Tyk Gateway
   shell: /opt/tyk-gateway/install/setup.sh --dashboard=1 --listenport={{ tyk_gateway_port }} --redishost=localhost --redisport=6379
 
+# customized tyk-gateway/tyk.conf changes have to be after the above configuration, which overwrites the configuration file
+- name: Disable hash_keys in tyk-gateway/tyk.conf so that keys can be listed
+  lineinfile:
+    path: /opt/tyk-gateway/tyk.conf
+    regexp: '^(\s*)"hash_keys": true,(\s*)$'
+    line: '\1"hash_keys": false,'
+    backrefs: yes
+    state: present
+  tags: hash_keys
+
 - name: Start Tyk Gateway
   systemd:
     name: tyk-gateway
-    state: started
+    state: restarted
     enabled: yes
+  tags: restart_tyk
 
 - name: Bootstrap the Dashboard with an initial user and organisation
   shell: /opt/tyk-dashboard/install/bootstrap.sh {{ tyk_dashboard_domain }}
+  tags: bootstrap
