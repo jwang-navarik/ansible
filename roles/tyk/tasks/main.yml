@@ -10,8 +10,10 @@
    - wget
    - epel-release
    - redis
+  tags: tyk_install
 
 - import_tasks: copy_repo.yml
+  tags: tyk_install
 
 #- name: Install public keys for the packages below
 #  rpm_key:
@@ -28,6 +30,7 @@
 #   - tyk-gateway
 - name: Install more packages
   command: yum install -y mongodb-org tyk-dashboard tyk-pump tyk-gateway
+  tags: tyk_install
 
 #  This is included in the tutorial but doesn't seem to be necessary
 #- name: Update All
@@ -36,19 +39,25 @@
 #    state: latest
 #    update_cache: yes
 
+- import_tasks: enable_tyk_services.yml
+  tags: tyk_enable
+
 - name: Start Mongo
   service:
     name: mongod
     state: started
     enabled: yes
+  tags: tyk_start
 
 - name: Start redis
   systemd:
     name: redis
     state: started
     enabled: yes
-
-- import_tasks: enable_tyk_services.yml
+  tags: tyk_start
 
 - import_tasks: start_tyk.yml
-  tags: start_tyk
+  tags: tyk_start
+
+- import_tasks: demo.yml
+  tags: tyk_demo

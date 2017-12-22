@@ -17,18 +17,18 @@
       get_url:
         url: "{{ keycloak_url }}"
         dest: /tmp/{{ keycloak_archive }}
+  tags: local
 
 - name: Apply common configuration to all nodes
   hosts: all:!local
   remote_user: root
-
   roles:
     - common
+  tags: common
 
 #- name: Install Docker CE
 #  hosts: docker_servers
 #  remote_user: root
-
 #  roles:
 #    - docker
 
